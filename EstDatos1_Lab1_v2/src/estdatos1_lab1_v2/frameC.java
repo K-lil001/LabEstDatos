@@ -54,32 +54,105 @@ public class frameC extends javax.swing.JFrame {
         File f = new File(sDir);
         String fileName = "agenda.txt";
         File file = new File(sDir, fileName);
+        String Horario[] = new String[18];
+        Horario[0] = "8:00";
+        Horario[1] = "8:30";
+        Horario[2] = "9:00";
+        Horario[3] = "9:30";
+        Horario[4] = "10:00";
+        Horario[5] = "10:30";
+        Horario[6] = "11:00";
+        Horario[7] = "11:30";
+        Horario[8] = "12:00";
+        Horario[9] = "12:30";
+        Horario[10] = "2:00";
+        Horario[11] = "2:30";
+        Horario[12] = "3:00";
+        Horario[13] = "3:30";
+        Horario[14] = "4:00";
+        Horario[15] = "4:30";
+        Horario[16] = "5:00";
+        Horario[17] = "5:30";
 
         if (!file.exists()) {
             f.mkdir();
-           
+
             try {
                 file.createNewFile();
-                        FileWriter fw = new FileWriter(file.getAbsolutePath(), true);
+                FileWriter fw = new FileWriter(file.getAbsolutePath(), true);
+                BufferedWriter bw = new BufferedWriter(fw);
+                bw.write(fechaN + "," + ",,,,,,,,,,,,,,,,,,"
+                        + ",,,,,,,,,,,,,,,,,,"
+                        + ",,,,,,,,,,,,,,,,,,"
+                        + "Disponible,Disponible,Disponible,Disponible,"
+                        + "Disponible,Disponible,Disponible,Disponible,"
+                        + "Disponible,Disponible,Disponible,Disponible,"
+                        + "Disponible,Disponible,Disponible,Disponible,"
+                        + "Disponible,Disponible,");
+                bw.newLine();
+                bw.flush();
+                bw.close();
+                fw.close();
+                DefaultTableModel model = (DefaultTableModel) tablaA.getModel();
+                for (int i = 0; i < 18; i++) {
+                    model.addRow(new Object[]{Horario[i], "", "", "", "Disponible"});
+                }
+
+            } catch (IOException ex) {
+                System.out.println("Error en crear el archivo Agenda");
+            }
+        } else {
+            try ( Scanner sc = new Scanner(file)) {
+                boolean existehoy = false;
+                while (sc.hasNextLine()) {
+                    String linea = sc.nextLine();
+                    String data[] = linea.split(",");
+                    String fechaA = data[0];
+                    String[] cedA = new String[18];
+                    String[] perroA = new String[18];
+                    String[] servicio = new String[18];
+                    String[] disponible = new String[18];
+                    DefaultTableModel model = (DefaultTableModel) tablaA.getModel();
+                    if (fechaA.equals(fechaN)) {
+                        existehoy = true;
+                        for (int i = 0; i < 18; i++) {
+                            cedA[i] = data[i + 1];
+                            perroA[i] = data[i + 19];
+                            servicio[i] = data[i + 37];
+                            disponible[i] = data[i + 55];
+                            model.addRow(new Object[]{Horario[i], cedA[i], perroA[i], servicio[i], disponible[i]});
+                        }
+                    }
+
+                }
+                if (existehoy == false) {
+                    try ( FileWriter fw = new FileWriter(file.getAbsolutePath(), true)) {
                         BufferedWriter bw = new BufferedWriter(fw);
-                        bw.write(fechaN + "," + "------------------" + "," +
-                                "------------------" + "," +
-                                "------------------" + "," +
-                                "Disponible-Disponible-Disponible-Disponible-"
-                                + "Disponible-Disponible-Disponible-Disponible-"
-                                + "Disponible-Disponible-Disponible-Disponible-"
-                                + "Disponible-Disponible-Disponible-Disponible-"
-                                + "Disponible-Disponible-");
+                        bw.write(fechaN + "," + ",,,,,,,,,,,,,,,,,,"
+                                + ",,,,,,,,,,,,,,,,,,"
+                                + ",,,,,,,,,,,,,,,,,,"
+                                + "Disponible,Disponible,Disponible,Disponible,"
+                                + "Disponible,Disponible,Disponible,Disponible,"
+                                + "Disponible,Disponible,Disponible,Disponible,"
+                                + "Disponible,Disponible,Disponible,Disponible,"
+                                + "Disponible,Disponible,");
                         bw.newLine();
                         bw.flush();
                         bw.close();
                         fw.close();
-                         DefaultTableModel model = (DefaultTableModel) tablaA.getModel();
-                         model.addRow(new Object[]{"8:00","A","A","A","Disponible"});
-                         
-            } catch (IOException ex) {
-                System.out.println("Error en crear el archivo Agenda");
+                        DefaultTableModel model = (DefaultTableModel) tablaA.getModel();
+                        for (int i = 0; i < 18; i++) {
+                            model.addRow(new Object[]{Horario[i], "", "", "", "Disponible"});
+                        }
+                    } catch (IOException e) {
+                        System.out.println("Error al registrar un nuevo paciente al archivo clientes");
+                    }
+                }
+            } catch (FileNotFoundException e) {
+
+                System.out.println("Error en transferir el archivo clientes a la tabla");
             }
+
         }
     }
 
@@ -727,7 +800,7 @@ public class frameC extends javax.swing.JFrame {
         String fechaN = dia + "/" + mes + "/" + year;
         int selectedRow = tablaC.getSelectedRow();
 
-        
+
     }//GEN-LAST:event_realizarB2ActionPerformed
 
     private void regisCitaRActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_regisCitaRActionPerformed
@@ -771,8 +844,8 @@ public class frameC extends javax.swing.JFrame {
     }//GEN-LAST:event_BañoRActionPerformed
 
     private void jTabbedPane1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTabbedPane1MouseClicked
-        
-        
+
+
     }//GEN-LAST:event_jTabbedPane1MouseClicked
 
     private void cedulaF2KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cedulaF2KeyReleased
