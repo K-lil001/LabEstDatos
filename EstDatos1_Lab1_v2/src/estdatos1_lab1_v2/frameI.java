@@ -5,13 +5,20 @@
  */
 package estdatos1_lab1_v2;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import static java.lang.System.console;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -19,11 +26,69 @@ import javax.swing.JOptionPane;
  */
 public class frameI extends javax.swing.JFrame {
 
+    static void removeLine(String filePath, String lineToRemove) throws IOException{
+        File inputFile = new File(filePath);
+        File tempFile = new File("C:\\user\\tmpFile.txt");
+        BufferedReader reader;
+        reader = new BufferedReader(new FileReader(inputFile));
+        BufferedWriter writer;
+        writer = new BufferedWriter(new FileWriter(tempFile));
+        String currentLine;
+        while ((currentLine = reader.readLine()) != null) {
+            String trimmedLine = currentLine.trim();
+            if (trimmedLine.equals(lineToRemove)) {
+                continue;
+            }
+            writer.write(currentLine + System.getProperty("line.separator"));
+        }
+        writer.close();
+        reader.close();
+        inputFile.delete();
+        tempFile.renameTo(inputFile);
+    }
+
     /**
      * Creates new form frameI
      */
     public frameI() {
         initComponents();
+    }
+
+    public static void createFile(File f, File file) {
+        f.mkdir();
+        try {
+            file.createNewFile();
+        } catch (IOException ex) {
+            System.out.println("Error en crear el archivo");
+        }
+    }
+
+    public static void writeLine(String filePath, String line) {
+        try ( FileWriter fw = new FileWriter(filePath, true)) {
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write(line);
+            bw.newLine();
+            bw.flush();
+            bw.close();
+            fw.close();
+        } catch (IOException e) {
+            System.out.println("Error al registrar un nuevo paciente al archivo clientes");
+        }
+    }
+
+    public static void overWrite(String filePath, String oldLine, String newLine) throws IOException {
+        Scanner sc = new Scanner(new File(filePath));
+        StringBuffer buffer = new StringBuffer();
+        while (sc.hasNextLine()) {
+            buffer.append(sc.nextLine() + System.lineSeparator());
+        }
+        String fileContents = buffer.toString();
+        sc.close();
+
+        fileContents = fileContents.replaceAll(oldLine, newLine);
+        FileWriter writer = new FileWriter(filePath);
+        writer.append(fileContents);
+        writer.flush();
     }
 
     /**
@@ -141,8 +206,6 @@ public class frameI extends javax.swing.JFrame {
     int ing = 0;
     String contraVet = "hola";
     String contraAdmin = "aloh";
-    
-
     private void ingClienteRActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ingClienteRActionPerformed
         ing = 0;
         ingText.setText("Cedula del Cliente:");
@@ -159,20 +222,15 @@ public class frameI extends javax.swing.JFrame {
     }//GEN-LAST:event_ingAdminRActionPerformed
 
     private void ingButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ingButtonActionPerformed
-        String contra;
-        long ced;
-        
         switch (ing) {
             case 0:
                 if (ingField.getText().equals("")) {
-                    JOptionPane.showMessageDialog(null, "Wow! desbloqueaste el modo hacker!!! (no es un bug es un feature lo juro)");
                     frameC uiC = new frameC();
-                    String sDir = "C:\\user";
-                    File f = new File(sDir);
-                    String fileName = "clientes.txt";
-                    File file = new File(sDir, fileName);
-
-                    if (file.exists()) {
+                    File f = new File("C:\\user");
+                    File file = new File("C:\\user", "clientes.txt");
+                    if (!file.exists()) {
+                        createFile(f, file);
+                    } else {
                         try ( Scanner sc = new Scanner(file)) {
                             ArrayList<String> perros = new ArrayList<String>();
                             while (sc.hasNextLine()) {
@@ -183,7 +241,6 @@ public class frameI extends javax.swing.JFrame {
                                 String raza = data[2];
                                 String color = data[3];
                                 String fechaN = data[4];
-
                                 perros.add(perro);
                                 frameC.AddRowToTablaC(new Object[]{
                                     cedula,
@@ -191,35 +248,25 @@ public class frameI extends javax.swing.JFrame {
                                     raza,
                                     color,
                                     fechaN});
-
                             }
                             frameC.AddRowToPerroCB(perros);
                         } catch (FileNotFoundException e) {
-
-                            System.out.println("Error en transferir el archivo clientes a la tabla");
-                        }
-                    } else {
-                        f.mkdir();
-                        try {
-                            file.createNewFile();
-                        } catch (IOException ex) {
-                            System.out.println("Error en crear el archivo clientes");
+                            System.out.println("Error en transferir el archivo clientes a la tabla (version hacker)");
                         }
                     }
-
                     uiC.setVisible(true);
                     dispose();
                 } else {
                     try {
-                        ced = Long.parseLong(ingField.getText());
+                        long ced = Long.parseLong(ingField.getText());
                         if (ingField.getText().length() == 10) {
                             frameC uiC = new frameC();
-                            String sDir = "C:\\user";
-                            File f = new File(sDir);
-                            String fileName = "clientes.txt";
-                            File file = new File(sDir, fileName);
+                            File f = new File("C:\\user");
+                            File file = new File("C:\\user", "clientes.txt");
 
-                            if (file.exists()) {
+                            if (!file.exists()) {
+                                createFile(f, file);
+                            } else {
                                 try ( Scanner sc = new Scanner(file)) {
                                     ArrayList<String> perros = new ArrayList<String>();
                                     while (sc.hasNextLine()) {
@@ -230,7 +277,6 @@ public class frameI extends javax.swing.JFrame {
                                         String raza = data[2];
                                         String color = data[3];
                                         String fechaN = data[4];
-
                                         if (cedula.equals(ingField.getText())) {
                                             perros.add(perro);
                                             frameC.AddRowToTablaC(new Object[]{
@@ -244,37 +290,22 @@ public class frameI extends javax.swing.JFrame {
                                     }
                                     frameC.textFieldsONorOFF(String.valueOf(ced), false);
                                     frameC.AddRowToPerroCB(perros);
-                                    System.out.println("b");
                                 } catch (FileNotFoundException e) {
-
                                     System.out.println("Error en transferir el archivo clientes a la tabla");
                                 }
-                            } else {
-                                f.mkdir();
-                                try {
-                                    file.createNewFile();
-                                } catch (IOException ex) {
-                                    System.out.println("Error en crear el archivo clientes");
-                                }
                             }
-
                             uiC.setVisible(true);
                             dispose();
                         } else {
-                            JOptionPane.showMessageDialog(null, "Su cedula debe ser de 10 numeros");
+                            JOptionPane.showMessageDialog(null, "Su cedula debe ser 10 numeros");
                         }
-
                     } catch (Exception e) {
-                        System.out.println(e);
                         JOptionPane.showMessageDialog(null, "Su cedula debe ser en numeros");
-
                     }
                 }
-
                 break;
             case 1:
-                contra = ingField.getText();
-                if (contra.equals(contraVet)) {
+                if (contraVet.equals(ingField.getText())) {
                     frameV uiV = new frameV();
                     uiV.setVisible(true);
                 } else {
@@ -282,8 +313,7 @@ public class frameI extends javax.swing.JFrame {
                 }
                 break;
             case 2:
-                contra = ingField.getText();
-                if (contra.equals(contraAdmin)) {
+                if (contraAdmin.equals(ingField.getText())) {
                     frameA uiA = new frameA();
                     uiA.setVisible(true);
                 } else {
@@ -292,7 +322,7 @@ public class frameI extends javax.swing.JFrame {
                 break;
         }
     }//GEN-LAST:event_ingButtonActionPerformed
-    
+
     /**
      * @param args the command line arguments
      */

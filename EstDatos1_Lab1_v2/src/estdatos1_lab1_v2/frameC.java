@@ -5,6 +5,8 @@
  */
 package estdatos1_lab1_v2;
 
+import com.toedter.calendar.IDateEvaluator;
+import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -40,119 +42,50 @@ public class frameC extends javax.swing.JFrame {
         Date date = new Date();
         fechaC2.setDate(date);
         fechaC2.setMinSelectableDate(new Date());
-        String dia = Integer.toString(fechaC2.getCalendar().get(Calendar.DAY_OF_MONTH));
-        String mes = Integer.toString(fechaC2.getCalendar().get(Calendar.MONTH) + 1);
-        String year = Integer.toString(fechaC2.getCalendar().get(Calendar.YEAR));
+        actualizarCita();
+        fechaC2.getJCalendar().getDayChooser().addDateEvaluator(new MyDateEvaluator());
+    }
 
-        //Sacar información de los TextFields
-        String cedula = cedulaF2.getText();
-        String perro = perroCBox.getSelectedItem().toString();
-        String fechaN = dia + "/" + mes + "/" + year;
-        diaHorario.setText("Horario para " + fechaN);
+    private static class MyDateEvaluator implements IDateEvaluator {
 
-        String sDir = "C:\\user";
-        File f = new File(sDir);
-        String fileName = "agenda.txt";
-        File file = new File(sDir, fileName);
-        String Horario[] = new String[18];
-        Horario[0] = "8:00";
-        Horario[1] = "8:30";
-        Horario[2] = "9:00";
-        Horario[3] = "9:30";
-        Horario[4] = "10:00";
-        Horario[5] = "10:30";
-        Horario[6] = "11:00";
-        Horario[7] = "11:30";
-        Horario[8] = "12:00";
-        Horario[9] = "12:30";
-        Horario[10] = "2:00";
-        Horario[11] = "2:30";
-        Horario[12] = "3:00";
-        Horario[13] = "3:30";
-        Horario[14] = "4:00";
-        Horario[15] = "4:30";
-        Horario[16] = "5:00";
-        Horario[17] = "5:30";
+        @Override
+        public boolean isSpecial(Date date) {
+            return false;
+        }
 
-        if (!file.exists()) {
-            f.mkdir();
+        @Override
+        public Color getSpecialForegroundColor() {
+            return null;
+        }
 
-            try {
-                file.createNewFile();
-                FileWriter fw = new FileWriter(file.getAbsolutePath(), true);
-                BufferedWriter bw = new BufferedWriter(fw);
-                bw.write(fechaN + "," + ",,,,,,,,,,,,,,,,,,"
-                        + ",,,,,,,,,,,,,,,,,,"
-                        + ",,,,,,,,,,,,,,,,,,"
-                        + "Disponible,Disponible,Disponible,Disponible,"
-                        + "Disponible,Disponible,Disponible,Disponible,"
-                        + "Disponible,Disponible,Disponible,Disponible,"
-                        + "Disponible,Disponible,Disponible,Disponible,"
-                        + "Disponible,Disponible,");
-                bw.newLine();
-                bw.flush();
-                bw.close();
-                fw.close();
-                DefaultTableModel model = (DefaultTableModel) tablaA.getModel();
-                for (int i = 0; i < 18; i++) {
-                    model.addRow(new Object[]{Horario[i], "", "", "", "Disponible"});
-                }
+        @Override
+        public Color getSpecialBackroundColor() {
+            return null;
+        }
 
-            } catch (IOException ex) {
-                System.out.println("Error en crear el archivo Agenda");
-            }
-        } else {
-            try ( Scanner sc = new Scanner(file)) {
-                boolean existehoy = false;
-                while (sc.hasNextLine()) {
-                    String linea = sc.nextLine();
-                    String data[] = linea.split(",");
-                    String fechaA = data[0];
-                    String[] cedA = new String[18];
-                    String[] perroA = new String[18];
-                    String[] servicio = new String[18];
-                    String[] disponible = new String[18];
-                    DefaultTableModel model = (DefaultTableModel) tablaA.getModel();
-                    if (fechaA.equals(fechaN)) {
-                        existehoy = true;
-                        for (int i = 0; i < 18; i++) {
-                            cedA[i] = data[i + 1];
-                            perroA[i] = data[i + 19];
-                            servicio[i] = data[i + 37];
-                            disponible[i] = data[i + 55];
-                            model.addRow(new Object[]{Horario[i], cedA[i], perroA[i], servicio[i], disponible[i]});
-                        }
-                    }
+        @Override
+        public String getSpecialTooltip() {
+            return null;
+        }
 
-                }
-                if (existehoy == false) {
-                    try ( FileWriter fw = new FileWriter(file.getAbsolutePath(), true)) {
-                        BufferedWriter bw = new BufferedWriter(fw);
-                        bw.write(fechaN + "," + ",,,,,,,,,,,,,,,,,,"
-                                + ",,,,,,,,,,,,,,,,,,"
-                                + ",,,,,,,,,,,,,,,,,,"
-                                + "Disponible,Disponible,Disponible,Disponible,"
-                                + "Disponible,Disponible,Disponible,Disponible,"
-                                + "Disponible,Disponible,Disponible,Disponible,"
-                                + "Disponible,Disponible,Disponible,Disponible,"
-                                + "Disponible,Disponible,");
-                        bw.newLine();
-                        bw.flush();
-                        bw.close();
-                        fw.close();
-                        DefaultTableModel model = (DefaultTableModel) tablaA.getModel();
-                        for (int i = 0; i < 18; i++) {
-                            model.addRow(new Object[]{Horario[i], "", "", "", "Disponible"});
-                        }
-                    } catch (IOException e) {
-                        System.out.println("Error al registrar un nuevo paciente al archivo clientes");
-                    }
-                }
-            } catch (FileNotFoundException e) {
+        @Override
+        public boolean isInvalid(Date date) {
+            return date.getDay() == 0 || date.getDay()== 6;
+        }
 
-                System.out.println("Error en transferir el archivo clientes a la tabla");
-            }
+        @Override
+        public Color getInvalidForegroundColor() {
+            return null;
+        }
 
+        @Override
+        public Color getInvalidBackroundColor() {
+            return null;
+        }
+
+        @Override
+        public String getInvalidTooltip() {
+            return null;
         }
     }
 
@@ -215,12 +148,6 @@ public class frameC extends javax.swing.JFrame {
         elimCitaR = new javax.swing.JRadioButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        jTabbedPane1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jTabbedPane1MouseClicked(evt);
-            }
-        });
 
         jLabel1.setText("Tabla de pacientes");
 
@@ -585,7 +512,7 @@ public class frameC extends javax.swing.JFrame {
             public void propertyChange(java.beans.PropertyChangeEvent evt) {
                 //Aquí agregaremos la funcionalidad que queremos
                 //por ejemplo al seleccionar una fecha le mostrare un diálogo con la fecha de hoy
-                actualizarFecha();
+                actualizarCita();
             }
         });
 
@@ -659,6 +586,7 @@ public class frameC extends javax.swing.JFrame {
         String color = colorF.getText();
         String fechaN = dia + "/" + mes + "/" + year;
 
+        String path = "C://user//clientes.txt";
         int selectedRow = tablaC.getSelectedRow();
 
         switch (accion) {
@@ -667,71 +595,27 @@ public class frameC extends javax.swing.JFrame {
                 long ced = Long.parseLong(cedulaF.getText());
                 if (cedulaF.getText().length() == 10) {
                     model.addRow(new Object[]{cedula, perro, raza, color, fechaN});
-
-                    try ( FileWriter fw = new FileWriter("C:\\user\\clientes.txt", true)) {
-                        BufferedWriter bw = new BufferedWriter(fw);
-                        bw.write(cedula + "," + perro + "," + raza + "," + color + "," + fechaN);
-                        bw.newLine();
-                        bw.flush();
-                        bw.close();
-                        fw.close();
-                    } catch (IOException e) {
-                        System.out.println("Error al registrar un nuevo paciente al archivo clientes");
-                    }
+                    frameI.writeLine(path, cedula + "," + perro + "," + raza + "," + color + "," + fechaN);
                 } else {
                     JOptionPane.showMessageDialog(null, "Su cedula debe ser de 10 numeros");
                 }
-
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, "Su cedula debe ser en numeros");
             }
-
             break;
             case 1:
-
                 if (selectedRow != -1) {
-                    //Instantiating the File class
-                    String filePath = "C:\\user\\clientes.txt";
-                    //Instantiating the Scanner class to read the file
-                    Scanner sc;
+                    String oldLine = (String) model.getValueAt(selectedRow, 0) + ","
+                            + (String) model.getValueAt(selectedRow, 1) + ","
+                            + (String) model.getValueAt(selectedRow, 2) + ","
+                            + (String) model.getValueAt(selectedRow, 3) + ","
+                            + (String) model.getValueAt(selectedRow, 4);
+                    String newLine = cedula + "," + perro + "," + raza + "," + color + "," + fechaN;
                     try {
-                        sc = new Scanner(new File(filePath));
-                        //instantiating the StringBuffer class
-                        StringBuffer buffer = new StringBuffer();
-                        //Reading lines of the file and appending them to StringBuffer
-                        while (sc.hasNextLine()) {
-                            buffer.append(sc.nextLine() + System.lineSeparator());
-                        }
-                        String fileContents = buffer.toString();
-                        System.out.println("Contents of the file: " + fileContents);
-                        //closing the Scanner object
-                        sc.close();
-                        String oldLine = (String) model.getValueAt(selectedRow, 0) + ","
-                                + (String) model.getValueAt(selectedRow, 1) + ","
-                                + (String) model.getValueAt(selectedRow, 2) + ","
-                                + (String) model.getValueAt(selectedRow, 3) + ","
-                                + (String) model.getValueAt(selectedRow, 4);
-                        String newLine = cedula + "," + perro + "," + raza + "," + color + "," + fechaN;
-                        System.out.println("old line: " + oldLine);
-                        System.out.println("n line: " + newLine);
-                        //Replacing the old line with new line
-                        fileContents = fileContents.replaceAll(oldLine, newLine);
-                        //instantiating the FileWriter class
-                        FileWriter writer;
-                        try {
-                            writer = new FileWriter(filePath);
-                            System.out.println("");
-                            System.out.println("new data: " + fileContents);
-                            writer.append(fileContents);
-                            writer.flush();
-                        } catch (IOException ex) {
-                            Logger.getLogger(frameC.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-
-                    } catch (FileNotFoundException ex) {
-                        Logger.getLogger(frameC.class.getName()).log(Level.SEVERE, null, ex);
+                        frameI.overWrite(path, oldLine, newLine);
+                    } catch (IOException ex) {
+                        System.out.println("Error al sobreescribir el archivo clientes");;
                     }
-
                     model.setValueAt(cedula, selectedRow, 0);
                     model.setValueAt(perro, selectedRow, 1);
                     model.setValueAt(raza, selectedRow, 2);
@@ -741,39 +625,14 @@ public class frameC extends javax.swing.JFrame {
                 break;
             case 2:
                 if (selectedRow != -1) {
-                    File inputFile = new File("C:\\user\\clientes.txt");
-                    File tempFile = new File("C:\\user\\tmpFile.txt");
-
-                    BufferedReader reader;
+                    String lineToRemove = (String) model.getValueAt(selectedRow, 0) + ","
+                            + (String) model.getValueAt(selectedRow, 1) + ","
+                            + (String) model.getValueAt(selectedRow, 2) + ","
+                            + (String) model.getValueAt(selectedRow, 3) + ","
+                            + (String) model.getValueAt(selectedRow, 4);
                     try {
-                        reader = new BufferedReader(new FileReader(inputFile));
-                        BufferedWriter writer;
-                        try {
-                            writer = new BufferedWriter(new FileWriter(tempFile));
-                            String lineToRemove = (String) model.getValueAt(selectedRow, 0) + ","
-                                    + (String) model.getValueAt(selectedRow, 1) + ","
-                                    + (String) model.getValueAt(selectedRow, 2) + ","
-                                    + (String) model.getValueAt(selectedRow, 3) + ","
-                                    + (String) model.getValueAt(selectedRow, 4);
-                            String currentLine;
-
-                            while ((currentLine = reader.readLine()) != null) {
-                                // trim newline when comparing with lineToRemove
-                                String trimmedLine = currentLine.trim();
-                                if (trimmedLine.equals(lineToRemove)) {
-                                    continue;
-                                }
-                                writer.write(currentLine + System.getProperty("line.separator"));
-                            }
-                            writer.close();
-                            reader.close();
-                            inputFile.delete();
-                            boolean successful = tempFile.renameTo(inputFile);
-                            System.out.println(successful);
-                        } catch (IOException ex) {
-                            Logger.getLogger(frameC.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    } catch (FileNotFoundException ex) {
+                        frameI.removeLine(path, lineToRemove);
+                    } catch (IOException ex) {
                         Logger.getLogger(frameC.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     model.removeRow(selectedRow);
@@ -798,8 +657,218 @@ public class frameC extends javax.swing.JFrame {
         String cedula = cedulaF2.getText();
         String perro = perroCBox.getSelectedItem().toString();
         String fechaN = dia + "/" + mes + "/" + year;
-        int selectedRow = tablaC.getSelectedRow();
+        int selectedRow = tablaA.getSelectedRow();
 
+        switch (accion2) {
+            case 0:
+                if (servicio == 4 || servicio == 6) {
+                    System.out.println("servicio 2:" + servicio);
+                    File f = new File("C://user");
+                    File file = new File("C://user", "guardYbanio.txt");
+                    if (!file.exists()) {
+                        frameI.createFile(f, file);
+                        if (servicio == 4) {
+                            frameI.writeLine(file.getAbsolutePath(), fechaN + "," + cedula + "," + perro + "," + "Guardado" + "," + ",,,,,,,," + "," + "0");
+                            JOptionPane.showMessageDialog(null, perro + " fue llevado a la guarderia el " + fechaN);
+                        } else {
+                            frameI.writeLine(file.getAbsolutePath(), fechaN + "," + cedula + "," + perro + "," + "noGuardado" + "," + "Baño,,,,,,,," + "1");
+                            JOptionPane.showMessageDialog(null, perro + " va a bañrse");
+                        }
+                    } else {
+                        try ( Scanner sc = new Scanner(file)) {
+                            boolean existehoy = false;
+                            while (sc.hasNextLine()) {
+                                String linea = sc.nextLine();
+                                String data[] = linea.split(",");
+                                String fechaA = data[0];
+                                String cedA = data[1];
+                                String perroA = data[2];
+                                String guardado = data[3];
+                                String[] banio = new String[8];
+                                int numB = Integer.parseInt(data[12]);
+                                System.out.println("aaaa" + numB);
+                                if (fechaA.equals(fechaN) && cedA.equals(cedula) && perroA.equals(perro)) {
+                                    System.out.println(linea.length());
+                                    existehoy = true;
+                                    if (servicio == 4) {
+                                        if (!guardado.equals("Guardado")) {
+                                            try {
+                                                frameI.overWrite(file.getAbsolutePath(), "noGuardado", "Guardado");
+                                            } catch (IOException ex) {
+                                                System.out.println("Error al sobreescribir el archivo guardYbanio");
+                                            }
+                                            JOptionPane.showMessageDialog(null, perro + " fue llevado a la guarderia el " + fechaN);
+                                        } else {
+                                            JOptionPane.showMessageDialog(null, "Ya pagastes por la guarderia el dia de hoy");
+                                        }
+                                    } else {
+                                        if (numB <= 8) {
+                                            String newLine = fechaA + "," + cedA + "," + perroA + "," + guardado;
+                                            for (int i = 4; i < 12; i++) {
+                                                if (numB + 4 == i) {
+                                                    newLine += "," + "Baño";
+                                                } else {
+                                                    newLine += "," + data[i];
+                                                }
+
+                                            }
+                                            newLine += "," + String.valueOf(numB + 1);
+                                            try {
+                                                frameI.overWrite(file.getAbsolutePath(), linea, newLine);
+                                                System.out.println(linea);
+                                                System.out.println(newLine);
+                                            } catch (IOException ex) {
+                                                Logger.getLogger(frameC.class.getName()).log(Level.SEVERE, null, ex);
+                                            }
+                                            JOptionPane.showMessageDialog(null, perro + " va a bañarse " + numB + " veces");
+                                        } else {
+                                            JOptionPane.showMessageDialog(null, "No puedes bañar a " + perro + " mas de 8 veces por dia (porque son 9 horas de trabajo)");
+                                        }
+
+                                    }
+
+                                }
+
+                            }
+                            if (existehoy == false) {
+                                if (servicio == 4) {
+                                    frameI.writeLine(file.getAbsolutePath(), fechaN + "," + cedula + "," + perro + "," + "Guardado" + "," + ",,,,,,,," + "," + "0");
+                                    JOptionPane.showMessageDialog(null, perro + " fue llevado a la guarderia el " + fechaN);
+                                } else {
+                                    frameI.writeLine(file.getAbsolutePath(), fechaN + "," + cedula + "," + perro + "," + "noGuardado" + "," + "Baño,,,,,,,," + "," + "1");
+                                    JOptionPane.showMessageDialog(null, perro + " va a bañrse");
+                                }
+                            }
+                        } catch (FileNotFoundException e) {
+                            System.out.println("Error en transferir el archivo guarderiaYbanio a la tabla");
+                        }
+                    }
+
+                } else {
+                    if (selectedRow != -1) {
+                        String disp = "Disponible";
+                        if (disp.equals((String) model.getValueAt(selectedRow, 4))
+                                && (servicio == 1 || servicio == 2 || servicio == 3)) {
+
+                            updateAgenda(selectedRow, fechaN, perro, cedula);
+
+                        } else if (disp.equals((String) model.getValueAt(selectedRow, 4))
+                                && disp.equals((String) model.getValueAt(selectedRow + 1, 4))
+                                && (servicio == 0 || servicio == 5)) {
+                            if (!(selectedRow == 17)) {
+                                updateAgenda(selectedRow, fechaN, perro, cedula);
+                                updateAgenda(selectedRow + 1, fechaN, perro, cedula);
+                            } else {
+                                JOptionPane.showMessageDialog(null, "No hay tiempo suficiente");
+
+                            }
+
+                        } else {
+                            JOptionPane.showMessageDialog(null, "No hay tiempo suficiente o la hora esta ocupada");
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Seleccione una hora");
+                    }
+                }
+                break;
+            case 1:
+                if (servicio == 4 || servicio == 6) {
+                    JOptionPane.showMessageDialog(null, "No es cita sorry, ya pagastes");
+                } else {
+                    if (selectedRow != -1) {
+                        if (cedula.equals((String) model.getValueAt(selectedRow, 1))) {
+                            if ("Vacunacion,Control,Desparasitacion".contains((String) model.getValueAt(selectedRow, 3))) {
+                                if (servicio > 0 && servicio < 4) {
+                                    updateAgenda(selectedRow, fechaN, perro, cedula);
+                                } else {
+                                    updateAgenda(selectedRow, fechaN, perro, cedula);
+                                    updateAgenda(selectedRow + 1, fechaN, perro, cedula);
+                                }
+                            } else {
+                                String a = (String) model.getValueAt(selectedRow, 1) + (String) model.getValueAt(selectedRow, 2)
+                                        + (String) model.getValueAt(selectedRow, 3) + (String) model.getValueAt(selectedRow, 4);
+                                String b;
+                                if (selectedRow == 17) {
+                                    b = "a";
+                                } else {
+                                    b = (String) model.getValueAt(selectedRow + 1, 1) + (String) model.getValueAt(selectedRow + 1, 2)
+                                            + (String) model.getValueAt(selectedRow + 1, 3) + (String) model.getValueAt(selectedRow + 1, 4);
+                                }
+                                String c;
+                                if (selectedRow == 0) {
+                                    c = "a";
+                                } else {
+                                    c = (String) model.getValueAt(selectedRow - 1, 1) + (String) model.getValueAt(selectedRow - 1, 2)
+                                            + (String) model.getValueAt(selectedRow - 1, 3) + (String) model.getValueAt(selectedRow - 1, 4);
+                                }
+
+                                if (servicio > 0 && servicio < 4) {
+                                    if (a.equals(b)) {
+                                        updateAgenda(selectedRow, fechaN, perro, cedula);
+                                        int temp = servicio;
+                                        servicio = 7;
+                                        updateAgenda(selectedRow + 1, fechaN, "", "");
+                                        servicio = temp;
+                                    } else if (a.equals(c)) {
+                                        updateAgenda(selectedRow - 1, fechaN, perro, cedula);
+                                        int temp = servicio;
+                                        servicio = 7;
+                                        updateAgenda(selectedRow, fechaN, "", "");
+                                        servicio = temp;
+                                    }
+                                } else {
+                                    if (a.equals(b)) {
+                                        updateAgenda(selectedRow, fechaN, perro, cedula);
+                                        updateAgenda(selectedRow + 1, fechaN, perro, cedula);
+                                    } else if (a.equals(c)) {
+                                        updateAgenda(selectedRow - 1, fechaN, perro, cedula);
+                                        updateAgenda(selectedRow, fechaN, perro, cedula);
+                                    }
+                                }
+                            }
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Esa cita no le pertenece");
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Seleccione una hora");
+                    }
+                }
+                break;
+            case 2:
+                if (servicio == 4 || servicio == 6) {
+                    JOptionPane.showMessageDialog(null, "No es cita sorry, ya pagastes");
+                } else {
+                    if (selectedRow != -1) {
+                        if (cedula.equals((String) model.getValueAt(selectedRow, 1))) {
+                            int temp = servicio;
+                            servicio = 7;
+                            if ("Vacunacion,Control,Desparasitacion".contains((String) model.getValueAt(selectedRow, 3))) {
+                                updateAgenda(selectedRow, fechaN, "", "");
+                            } else {
+                                String a = (String) model.getValueAt(selectedRow, 1) + (String) model.getValueAt(selectedRow, 2)
+                                        + (String) model.getValueAt(selectedRow, 3) + (String) model.getValueAt(selectedRow, 4);
+                                String b = (String) model.getValueAt(selectedRow + 1, 1) + (String) model.getValueAt(selectedRow + 1, 2)
+                                        + (String) model.getValueAt(selectedRow + 1, 3) + (String) model.getValueAt(selectedRow + 1, 4);
+                                String c = (String) model.getValueAt(selectedRow - 1, 1) + (String) model.getValueAt(selectedRow - 1, 2)
+                                        + (String) model.getValueAt(selectedRow - 1, 3) + (String) model.getValueAt(selectedRow - 1, 4);
+                                if (a.equals(b)) {
+                                    updateAgenda(selectedRow, fechaN, "", "");
+                                    updateAgenda(selectedRow + 1, fechaN, "", "");
+                                } else if (a.equals(c)) {
+                                    updateAgenda(selectedRow, fechaN, "", "");
+                                    updateAgenda(selectedRow - 1, fechaN, "", "");
+                                }
+                            }
+                            servicio = temp;
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Esa cita no le pertenece");
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Seleccione una hora");
+                    }
+                }
+                break;
+        }
 
     }//GEN-LAST:event_realizarB2ActionPerformed
 
@@ -833,6 +902,7 @@ public class frameC extends javax.swing.JFrame {
 
     private void guarderiaRActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guarderiaRActionPerformed
         servicio = 4;
+        System.out.println("servicio 1:" + servicio);
     }//GEN-LAST:event_guarderiaRActionPerformed
 
     private void radiologiaRActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radiologiaRActionPerformed
@@ -842,11 +912,6 @@ public class frameC extends javax.swing.JFrame {
     private void BañoRActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BañoRActionPerformed
         servicio = 6;
     }//GEN-LAST:event_BañoRActionPerformed
-
-    private void jTabbedPane1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTabbedPane1MouseClicked
-
-
-    }//GEN-LAST:event_jTabbedPane1MouseClicked
 
     private void cedulaF2KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cedulaF2KeyReleased
         String sDir = "C:\\user";
@@ -892,17 +957,169 @@ public class frameC extends javax.swing.JFrame {
         cedulaF2.setEditable(mode);
     }
 
-    public void actualizarFecha() {
+    public void actualizarCita() {
         try {
+            DefaultTableModel model = (DefaultTableModel) tablaA.getModel();
+            model.setRowCount(0);
+
             String dia = Integer.toString(fechaC2.getCalendar().get(Calendar.DAY_OF_MONTH));
             String mes = Integer.toString(fechaC2.getCalendar().get(Calendar.MONTH) + 1);
             String year = Integer.toString(fechaC2.getCalendar().get(Calendar.YEAR));
 
-            //Sacar información de los TextFields
+            String cedula = cedulaF2.getText();
+            String perro = perroCBox.getSelectedItem().toString();
             String fechaN = dia + "/" + mes + "/" + year;
             diaHorario.setText("Horario para " + fechaN);
+
+            String Horario[] = new String[18];
+            Horario[0] = "8:00";
+            Horario[1] = "8:30";
+            Horario[2] = "9:00";
+            Horario[3] = "9:30";
+            Horario[4] = "10:00";
+            Horario[5] = "10:30";
+            Horario[6] = "11:00";
+            Horario[7] = "11:30";
+            Horario[8] = "12:00";
+            Horario[9] = "12:30";
+            Horario[10] = "2:00";
+            Horario[11] = "2:30";
+            Horario[12] = "3:00";
+            Horario[13] = "3:30";
+            Horario[14] = "4:00";
+            Horario[15] = "4:30";
+            Horario[16] = "5:00";
+            Horario[17] = "5:30";
+
+            String sDir = "C:\\user";
+            File f = new File(sDir);
+            String fileName = "agenda.txt";
+            File file = new File(sDir, fileName);
+            if (!file.exists()) {
+                frameI.createFile(f, file);
+                frameI.writeLine(file.getAbsolutePath(), fechaN + "," + ",,,,,,,,,,,,,,,,,,"
+                        + ",,,,,,,,,,,,,,,,,,"
+                        + ",,,,,,,,,,,,,,,,,,"
+                        + "Disponible,Disponible,Disponible,Disponible,"
+                        + "Disponible,Disponible,Disponible,Disponible,"
+                        + "Disponible,Disponible,Disponible,Disponible,"
+                        + "Disponible,Disponible,Disponible,Disponible,"
+                        + "Disponible,Disponible,");
+                for (int i = 0; i < 18; i++) {
+                    model.addRow(new Object[]{Horario[i], "", "", "", "Disponible"});
+                }
+            } else {
+                try ( Scanner sc = new Scanner(file)) {
+                    boolean existehoy = false;
+                    while (sc.hasNextLine()) {
+                        String linea = sc.nextLine();
+                        String data[] = linea.split(",");
+                        String fechaA = data[0];
+                        String[] cedA = new String[18];
+                        String[] perroA = new String[18];
+                        String[] servicio = new String[18];
+                        String[] disponible = new String[18];
+
+                        if (fechaA.equals(fechaN)) {
+                            existehoy = true;
+                            for (int i = 0; i < 18; i++) {
+                                cedA[i] = data[i + 1];
+                                perroA[i] = data[i + 19];
+                                servicio[i] = data[i + 37];
+                                disponible[i] = data[i + 55];
+                                model.addRow(new Object[]{Horario[i], cedA[i], perroA[i], servicio[i], disponible[i]});
+                            }
+                        }
+
+                    }
+                    if (existehoy == false) {
+                        frameI.writeLine(file.getAbsolutePath(), fechaN + "," + ",,,,,,,,,,,,,,,,,,"
+                                + ",,,,,,,,,,,,,,,,,,"
+                                + ",,,,,,,,,,,,,,,,,,"
+                                + "Disponible,Disponible,Disponible,Disponible,"
+                                + "Disponible,Disponible,Disponible,Disponible,"
+                                + "Disponible,Disponible,Disponible,Disponible,"
+                                + "Disponible,Disponible,Disponible,Disponible,"
+                                + "Disponible,Disponible,");
+
+                        for (int i = 0; i < 18; i++) {
+                            model.addRow(new Object[]{Horario[i], "", "", "", "Disponible"});
+                        }
+                    }
+                } catch (FileNotFoundException e) {
+
+                    System.out.println("Error en transferir el archivo agenda a la tabla");
+                }
+            }
+            //Sacar información de los TextFields
         } catch (Exception e) {
 
+        }
+
+    }
+
+    public void updateAgenda(int selectedRow, String fechaN, String perro, String cedula) {
+
+        String serv = "";
+        String ocup = "Ocupado";
+        switch (servicio) {
+            case 0:
+                serv = "Consulta";
+                break;
+            case 1:
+                serv = "Control";
+                break;
+            case 2:
+                serv = "Desparasitacion";
+                break;
+            case 3:
+                serv = "Vacunacion";
+                break;
+            case 5:
+                serv = "Radiologia";
+                break;
+            case 7:
+                ocup = "Disponible";
+                break;
+        }
+
+        DefaultTableModel model = (DefaultTableModel) tablaA.getModel();
+        String filePath = "C:\\user\\agenda.txt";
+        String oldLine = fechaN;
+        for (int i = 0; i < 18; i++) {
+            oldLine += "," + (String) model.getValueAt(i, 1);
+        }
+        for (int i = 0; i < 18; i++) {
+            oldLine += "," + (String) model.getValueAt(i, 2);
+        }
+        for (int i = 0; i < 18; i++) {
+            oldLine += "," + (String) model.getValueAt(i, 3);
+        }
+        for (int i = 0; i < 18; i++) {
+            oldLine += "," + (String) model.getValueAt(i, 4);
+        }
+        model.setValueAt(cedula, selectedRow, 1);
+        model.setValueAt(perro, selectedRow, 2);
+        model.setValueAt(serv, selectedRow, 3);
+        model.setValueAt(ocup, selectedRow, 4);
+        String newLine = fechaN;
+        for (int i = 0; i < 18; i++) {
+            newLine += "," + (String) model.getValueAt(i, 1);
+        }
+        for (int i = 0; i < 18; i++) {
+            newLine += "," + (String) model.getValueAt(i, 2);
+        }
+        for (int i = 0; i < 18; i++) {
+            newLine += "," + (String) model.getValueAt(i, 3);
+        }
+        for (int i = 0; i < 18; i++) {
+            newLine += "," + (String) model.getValueAt(i, 4);
+        }
+
+        try {
+            frameI.overWrite(filePath, oldLine, newLine);
+        } catch (IOException ex) {
+            System.out.println("Error al sobreeescribir el archivo agenda");
         }
 
     }
@@ -921,16 +1138,21 @@ public class frameC extends javax.swing.JFrame {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
+
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(frameC.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frameC.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(frameC.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frameC.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(frameC.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frameC.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(frameC.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frameC.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
