@@ -24,6 +24,7 @@ public class frameI extends javax.swing.JFrame {
      */
     public frameI() {
         initComponents();
+        this.setLocationRelativeTo(null);
     }
 
     /**
@@ -139,8 +140,8 @@ public class frameI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
     int ing = 0;
-    String contraVet = "hola";
-    String contraAdmin = "aloh";
+    String contraVet = "vete";
+    String contraAdmin = "admin";
     
 
     private void ingClienteRActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ingClienteRActionPerformed

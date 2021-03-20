@@ -37,6 +37,7 @@ public class frameC extends javax.swing.JFrame {
      */
     public frameC() {
         initComponents();
+        this.setLocationRelativeTo(null);
         Date date = new Date();
         fechaC2.setDate(date);
         fechaC2.setMinSelectableDate(new Date());
@@ -102,7 +103,7 @@ public class frameC extends javax.swing.JFrame {
                 System.out.println("Error en crear el archivo Agenda");
             }
         } else {
-            try ( Scanner sc = new Scanner(file)) {
+            try (Scanner sc = new Scanner(file)) {
                 boolean existehoy = false;
                 while (sc.hasNextLine()) {
                     String linea = sc.nextLine();
@@ -126,7 +127,7 @@ public class frameC extends javax.swing.JFrame {
 
                 }
                 if (existehoy == false) {
-                    try ( FileWriter fw = new FileWriter(file.getAbsolutePath(), true)) {
+                    try (FileWriter fw = new FileWriter(file.getAbsolutePath(), true)) {
                         BufferedWriter bw = new BufferedWriter(fw);
                         bw.write(fechaN + "," + ",,,,,,,,,,,,,,,,,,"
                                 + ",,,,,,,,,,,,,,,,,,"
@@ -169,26 +170,6 @@ public class frameC extends javax.swing.JFrame {
         serviciosG = new javax.swing.ButtonGroup();
         CitaG = new javax.swing.ButtonGroup();
         jTabbedPane1 = new javax.swing.JTabbedPane();
-        jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tablaC = new javax.swing.JTable();
-        jLabel2 = new javax.swing.JLabel();
-        cedulaF = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
-        perroF = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
-        razaF = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
-        colorF = new javax.swing.JTextField();
-        jLabel6 = new javax.swing.JLabel();
-        fechaC = new com.toedter.calendar.JDateChooser();
-        jLabel7 = new javax.swing.JLabel();
-        accionRegR = new javax.swing.JRadioButton();
-        accionActR = new javax.swing.JRadioButton();
-        accionElimR = new javax.swing.JRadioButton();
-        regresarB = new javax.swing.JButton();
-        realizarB = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         diaHorario = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -213,6 +194,26 @@ public class frameC extends javax.swing.JFrame {
         regisCitaR = new javax.swing.JRadioButton();
         actCitaR = new javax.swing.JRadioButton();
         elimCitaR = new javax.swing.JRadioButton();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tablaC = new javax.swing.JTable();
+        jLabel2 = new javax.swing.JLabel();
+        cedulaF = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        perroF = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        razaF = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        colorF = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        fechaC = new com.toedter.calendar.JDateChooser();
+        jLabel7 = new javax.swing.JLabel();
+        accionRegR = new javax.swing.JRadioButton();
+        accionActR = new javax.swing.JRadioButton();
+        accionElimR = new javax.swing.JRadioButton();
+        regresarB = new javax.swing.JButton();
+        realizarB = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -221,6 +222,231 @@ public class frameC extends javax.swing.JFrame {
                 jTabbedPane1MouseClicked(evt);
             }
         });
+
+        diaHorario.setText("Disponibilidad para citas");
+
+        tablaA.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Hora", "Cedula del Dueño", "Nombre del Perro", "Procedimiento", "Disponibilidad"
+            }
+        ));
+        jScrollPane2.setViewportView(tablaA);
+
+        regresarB1.setText("Regresar");
+        regresarB1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                regresarB1ActionPerformed(evt);
+            }
+        });
+
+        jLabel9.setText("Fecha para la cita:");
+
+        serviciosG.add(consultaR);
+        consultaR.setText("Consulta veterinario $60.000= tiempo de servicio 1 hora");
+        consultaR.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                consultaRActionPerformed(evt);
+            }
+        });
+
+        serviciosG.add(controlR);
+        controlR.setText("Control                     $10.000= tiempo de servicio 1/2 hora");
+        controlR.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                controlRActionPerformed(evt);
+            }
+        });
+
+        serviciosG.add(desparasitacionR);
+        desparasitacionR.setText("Desparasitación\t         $40.000= tiempo de servicio 1/2 hora");
+        desparasitacionR.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                desparasitacionRActionPerformed(evt);
+            }
+        });
+
+        serviciosG.add(vacunacionR);
+        vacunacionR.setText("Vacunación                $35.000= tiempo de servicio 1/2 hora");
+        vacunacionR.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                vacunacionRActionPerformed(evt);
+            }
+        });
+
+        serviciosG.add(radiologiaR);
+        radiologiaR.setText("Radiología                  $100.000= tiempo de servicio 1 hora");
+        radiologiaR.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radiologiaRActionPerformed(evt);
+            }
+        });
+
+        serviciosG.add(BañoR);
+        BañoR.setText("Baño                          $25.000= tiempo de servicio 2 horas");
+        BañoR.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BañoRActionPerformed(evt);
+            }
+        });
+
+        serviciosG.add(guarderiaR);
+        guarderiaR.setText("Guardería solo por día $35.000");
+        guarderiaR.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                guarderiaRActionPerformed(evt);
+            }
+        });
+
+        jLabel10.setText("Eliga el perro para la cita:");
+
+        jLabel11.setText("Servicios:");
+
+        jLabel12.setText("Cedula del Dueño");
+
+        cedulaF2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                cedulaF2KeyReleased(evt);
+            }
+        });
+
+        perroCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        perroCBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                perroCBoxActionPerformed(evt);
+            }
+        });
+
+        realizarB2.setText("Realizar");
+        realizarB2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                realizarB2ActionPerformed(evt);
+            }
+        });
+
+        jLabel13.setText("¿Qué desea hacer?");
+
+        CitaG.add(regisCitaR);
+        regisCitaR.setText("Registrar cita");
+        regisCitaR.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                regisCitaRActionPerformed(evt);
+            }
+        });
+
+        CitaG.add(actCitaR);
+        actCitaR.setText("Actualizar cita");
+        actCitaR.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                actCitaRActionPerformed(evt);
+            }
+        });
+
+        CitaG.add(elimCitaR);
+        elimCitaR.setText("Eliminar cita");
+        elimCitaR.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                elimCitaRActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(diaHorario)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 599, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(regresarB1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(consultaR)
+                            .addComponent(guarderiaR, javax.swing.GroupLayout.PREFERRED_SIZE, 313, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(vacunacionR, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(desparasitacionR)
+                            .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cedulaF2)
+                            .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(fechaC2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(perroCBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(radiologiaR, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(BañoR, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(controlR, javax.swing.GroupLayout.PREFERRED_SIZE, 317, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(realizarB2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(regisCitaR, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(actCitaR, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(elimCitaR, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(diaHorario)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel9)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(fechaC2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel12)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cedulaF2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel10)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(perroCBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel11)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(consultaR)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(controlR)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(desparasitacionR)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(vacunacionR)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(guarderiaR)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(radiologiaR)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(BañoR)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
+                        .addComponent(jLabel13)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(regisCitaR)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(actCitaR)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(elimCitaR))
+                    .addComponent(jScrollPane2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(realizarB2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(regresarB1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
+
+        fechaC2.getDateEditor().addPropertyChangeListener(new java.beans.PropertyChangeListener(){
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                //Aquí agregaremos la funcionalidad que queremos
+                //por ejemplo al seleccionar una fecha le mostrare un diálogo con la fecha de hoy
+                actualizarFecha();
+            }
+        });
+
+        jTabbedPane1.addTab("Modulo de Agenda de citas", jPanel2);
 
         jLabel1.setText("Tabla de pacientes");
 
@@ -371,226 +597,6 @@ public class frameC extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Modulo de clientes y pacientes", jPanel1);
 
-        diaHorario.setText("Disponibilidad para citas");
-
-        tablaA.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Hora", "Cedula del Dueño", "Nombre del Perro", "Procedimiento", "Disponibilidad"
-            }
-        ));
-        jScrollPane2.setViewportView(tablaA);
-
-        regresarB1.setText("Regresar");
-        regresarB1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                regresarB1ActionPerformed(evt);
-            }
-        });
-
-        jLabel9.setText("Fecha para la cita:");
-
-        serviciosG.add(consultaR);
-        consultaR.setText("Consulta veterinario $60.000= tiempo de servicio 1 hora");
-        consultaR.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                consultaRActionPerformed(evt);
-            }
-        });
-
-        serviciosG.add(controlR);
-        controlR.setText("Control                     $10.000= tiempo de servicio 1/2 hora");
-        controlR.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                controlRActionPerformed(evt);
-            }
-        });
-
-        serviciosG.add(desparasitacionR);
-        desparasitacionR.setText("Desparasitación\t         $40.000= tiempo de servicio 1/2 hora");
-        desparasitacionR.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                desparasitacionRActionPerformed(evt);
-            }
-        });
-
-        serviciosG.add(vacunacionR);
-        vacunacionR.setText("Vacunación                $35.000= tiempo de servicio 1/2 hora");
-        vacunacionR.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                vacunacionRActionPerformed(evt);
-            }
-        });
-
-        serviciosG.add(radiologiaR);
-        radiologiaR.setText("Radiologia                  $100.000= tiempo de servicio 1 hora");
-        radiologiaR.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                radiologiaRActionPerformed(evt);
-            }
-        });
-
-        serviciosG.add(BañoR);
-        BañoR.setText("Baño                          $25.000= tiempo de servicio 2 horas");
-        BañoR.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BañoRActionPerformed(evt);
-            }
-        });
-
-        serviciosG.add(guarderiaR);
-        guarderiaR.setText("Guarderia solo por día $35.000= ");
-        guarderiaR.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                guarderiaRActionPerformed(evt);
-            }
-        });
-
-        jLabel10.setText("Eliga el perro para la cita:");
-
-        jLabel11.setText("Servicios:");
-
-        jLabel12.setText("Cedula del Dueño");
-
-        cedulaF2.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                cedulaF2KeyReleased(evt);
-            }
-        });
-
-        perroCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        realizarB2.setText("Realizar");
-        realizarB2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                realizarB2ActionPerformed(evt);
-            }
-        });
-
-        jLabel13.setText("Que desea hacer?");
-
-        CitaG.add(regisCitaR);
-        regisCitaR.setText("Registrar cita");
-        regisCitaR.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                regisCitaRActionPerformed(evt);
-            }
-        });
-
-        CitaG.add(actCitaR);
-        actCitaR.setText("Actualizar cita");
-        actCitaR.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                actCitaRActionPerformed(evt);
-            }
-        });
-
-        CitaG.add(elimCitaR);
-        elimCitaR.setText("Eliminar cita");
-        elimCitaR.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                elimCitaRActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(diaHorario)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 599, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(regresarB1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(consultaR)
-                            .addComponent(guarderiaR, javax.swing.GroupLayout.PREFERRED_SIZE, 313, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(vacunacionR, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(desparasitacionR)
-                            .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cedulaF2)
-                            .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(fechaC2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(perroCBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(radiologiaR, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(BañoR, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(controlR, javax.swing.GroupLayout.PREFERRED_SIZE, 317, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(realizarB2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(regisCitaR, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(actCitaR, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(elimCitaR, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(diaHorario)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel9)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(fechaC2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel12)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cedulaF2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel10)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(perroCBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel11)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(consultaR)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(controlR)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(desparasitacionR)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(vacunacionR)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(guarderiaR)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(radiologiaR)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(BañoR)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
-                        .addComponent(jLabel13)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(regisCitaR)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(actCitaR)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(elimCitaR))
-                    .addComponent(jScrollPane2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(realizarB2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(regresarB1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
-        );
-
-        fechaC2.getDateEditor().addPropertyChangeListener(new java.beans.PropertyChangeListener(){
-            public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                //Aquí agregaremos la funcionalidad que queremos
-                //por ejemplo al seleccionar una fecha le mostrare un diálogo con la fecha de hoy
-                actualizarFecha();
-            }
-        });
-
-        jTabbedPane1.addTab("Modulo de Agenda de citas", jPanel2);
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -621,6 +627,7 @@ public class frameC extends javax.swing.JFrame {
         int selectedRow = tablaC.getSelectedRow();
         try {
             DefaultTableModel model = (DefaultTableModel) tablaC.getModel();
+            
             cedulaF.setText(model.getValueAt(selectedRow, 0).toString());
             perroF.setText(model.getValueAt(selectedRow, 1).toString());
             razaF.setText(model.getValueAt(selectedRow, 2).toString());
@@ -668,7 +675,7 @@ public class frameC extends javax.swing.JFrame {
                 if (cedulaF.getText().length() == 10) {
                     model.addRow(new Object[]{cedula, perro, raza, color, fechaN});
 
-                    try ( FileWriter fw = new FileWriter("C:\\user\\clientes.txt", true)) {
+                    try (FileWriter fw = new FileWriter("C:\\user\\clientes.txt", true)) {
                         BufferedWriter bw = new BufferedWriter(fw);
                         bw.write(cedula + "," + perro + "," + raza + "," + color + "," + fechaN);
                         bw.newLine();
@@ -845,7 +852,6 @@ public class frameC extends javax.swing.JFrame {
 
     private void jTabbedPane1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTabbedPane1MouseClicked
 
-
     }//GEN-LAST:event_jTabbedPane1MouseClicked
 
     private void cedulaF2KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cedulaF2KeyReleased
@@ -853,7 +859,7 @@ public class frameC extends javax.swing.JFrame {
         File f = new File(sDir);
         String fileName = "clientes.txt";
         File file = new File(sDir, fileName);
-        try ( Scanner sc = new Scanner(file)) {
+        try (Scanner sc = new Scanner(file)) {
             ArrayList<String> perros = new ArrayList<String>();
             while (sc.hasNextLine()) {
                 String linea = sc.nextLine();
@@ -870,6 +876,10 @@ public class frameC extends javax.swing.JFrame {
 
         }
     }//GEN-LAST:event_cedulaF2KeyReleased
+
+    private void perroCBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_perroCBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_perroCBoxActionPerformed
 
     public static void AddRowToTablaC(Object[] dataRow) {
         DefaultTableModel model = (DefaultTableModel) tablaC.getModel();
